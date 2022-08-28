@@ -1,6 +1,28 @@
 let playerScore = 0;
 let computerScore = 0;
-game();
+
+const rock = document.querySelector('#Rock');
+rock.addEventListener('click', () => {
+    playerSelection = 'ROCK';
+    playRound(playerSelection, getComputerChoice());
+})
+
+const paper = document.querySelector('#Paper');
+paper.addEventListener('click', () => {
+    playerSelection = 'PAPER';
+    playRound(playerSelection, getComputerChoice());
+})
+
+const scissors = document.querySelector('#Scissors');
+scissors.addEventListener('click', () => {
+    playerSelection = 'SCISSORS';
+    playRound(playerSelection, getComputerChoice());
+})
+
+function writeScore() {
+    const container = document.querySelector('#score');
+    container.textContent = `Player Score: ${playerScore} Computer Score: ${computerScore}`;
+}
 
 function getComputerChoice() {
     let randomInt = Math.floor(Math.random() * 3);
@@ -21,66 +43,66 @@ function getComputerChoice() {
 function playRound(playerSelection, computerSelection) {
     if (playerSelection == 'ROCK') {
         if (computerSelection == 'ROCK') {
-            console.log(`It's a draw! ${playerSelection} ties with ${computerSelection}`);
+            writeDraw(playerSelection, computerSelection);
         }
         else if (computerSelection == 'SCISSORS') {
-            console.log(`You Win! ${playerSelection} beats ${computerSelection}`);
-            return playerScore +=1;
+            writeWin(playerSelection, computerSelection);
         }
         else if (computerSelection == 'PAPER') {
-            console.log(`You Lose! ${computerSelection} beats ${playerSelection}`);
-            return computerScore +=1;
+            writeLose(playerSelection, computerSelection);
         }
     }
     else if (playerSelection == 'PAPER') {
         if (computerSelection == 'PAPER') {
-            console.log(`It's a draw! ${playerSelection} ties with ${computerSelection}`);
+            writeDraw(playerSelection, computerSelection);
         }
         else if (computerSelection == 'ROCK') {
-            console.log(`You Win! ${playerSelection} beats ${computerSelection}`);
-            return playerScore +=1;
+            writeWin(playerSelection, computerSelection);
         }
         else if (computerSelection == 'SCISSORS') {
-            console.log(`You Lose! ${computerSelection} beats ${playerSelection}`);
-            return computerScore +=1;
+            writeLose(playerSelection, computerSelection);
         }
     }
     else if (playerSelection == 'SCISSORS') {
         if (computerSelection == 'SCISSORS') {
-            console.log(`It's a draw! ${playerSelection} ties with ${computerSelection}`);
+            writeDraw(playerSelection, computerSelection);
         }
         else if (computerSelection == 'PAPER') {
-            console.log(`You Win! ${playerSelection} beats ${computerSelection}`);
-            return playerScore +=1;
+            writeWin(playerSelection, computerSelection);
         }
         else if (computerSelection == 'ROCK') {
-            console.log(`You Lose! ${computerSelection} beats ${playerSelection}`);
-            return computerScore +=1;
+            writeLose(playerSelection, computerSelection);
         }
     }
 }
 
-
-// Write a NEW function called game(). Call the playRound function inside of this one to play a 5 round game that keeps score and reports a winner or loser at the end.
-// Remember loops? This is a great opportunity to use one to play those five rounds:
-function game() {
-    let playerSelection = "";
-    let computerSelection = "";
-    for (let i = 1; i <= 5; i++) {
-        playerSelection = (prompt("Make your choice: ")).toUpperCase();
-        computerSelection = getComputerChoice();
-        console.log(`Round: ${i} \n You Chose: ${playerSelection} \n Computer Chose: ${computerSelection}`);
-        playRound(playerSelection, computerSelection);
-     }
-    if (playerScore > computerScore) {
-        console.log(`You Won! ${playerScore} games to ${computerScore}`);
-    }
-    else if (computerScore > playerScore) {
-        console.log(`You Lost! ${playerScore} games to ${computerScore}`);
-    }
+function writeWin(playerSelection, computerSelection) {
+    const container = document.querySelector('#result');
+    container.textContent = `You Win! ${playerSelection} beats ${computerSelection}`;
+    playerScore += 1;
+    writeScore(playerScore, computerScore);
+    checkGameEnd(playerScore, computerScore);
 }
 
-// At this point you should be using console.log() to display the results of each round and the winner at the end.
-// Use prompt() to get input from the user. Read the docs here if you need to.
-// Feel free to re-work your previous functions if you need to. Specifically, you might want to change the return value to something more useful.
-// Feel free to create more “helper” functions if you think it would be useful.
+function writeLose(playerSelection, computerSelection) {
+    const container = document.querySelector('#result');
+    container.textContent = `You Lose! ${computerSelection} beats ${playerSelection}`;
+    computerScore += 1;
+    writeScore(playerScore, computerScore);
+    checkGameEnd(playerScore, computerScore);
+}
+
+function writeDraw(playerSelection, computerSelection) {
+    const container = document.querySelector('#result');
+    container.textContent = `It's a draw! ${playerSelection} ties with ${computerSelection}`;
+}
+
+function checkGameEnd(playerScore, computerScore) {
+    const container = document.querySelector('#result');
+    if (playerScore == 5) {
+        container.textContent = `The player has won ${playerScore} games to ${computerScore}`;
+    }
+    else if (computerScore == 5) {
+        container.textContent = `The player has Lost ${computerScore} games to ${playerScore}`;
+    }
+}
